@@ -6,8 +6,8 @@ import { Route, Routes } from "react-router-dom";
 export const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/boards" element={<BoardPage />} />
-      <Route path="/boards/:boardId" element={<BoardsListPage />} />
+      <Route path="/boards" element={<BoardsListPage />} />
+      <Route path="/boards/:boardId" element={<BoardPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
     </Routes>

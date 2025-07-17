@@ -1,7 +1,10 @@
+import { useParams } from "react-router-dom";
+
 export function BoardPage() {
+   const { boardId } = useParams();
   return (
     <div>
-      <h1>Board page</h1>
+      <h1>Board page {boardId}</h1>
     </div>
   );
 }
