@@ -9,7 +9,7 @@ export function App() {
     location.pathname === "/login" || location.pathname === "/register";
 
   return (
-    <div>
+    <div className="bg-gray-300">
       {!isAuthPage && <AppHeader />}
       <AppRoutes />
     </div>
