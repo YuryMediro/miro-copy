@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-export function BoardPage() {
+export default function BoardPage() {
   const { boardId } = useParams();
   return (
     <div>

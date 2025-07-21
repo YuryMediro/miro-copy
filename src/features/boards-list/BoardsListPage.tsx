@@ -5,7 +5,7 @@ import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 
-export function BoardsListPage() {
+export default function BoardsListPage() {
   const queryClient = useQueryClient();
   const boardsQuery = rqClient.useQuery("get", "/boards");
 
