@@ -1,6 +1,7 @@
+import { useSession } from "@/shared/model/session";
 import { Skeleton } from "@/shared/ui/kit/skeleton";
 import { Suspense, lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 const LoginPage = lazy(() => import("@/features/auth/LoginPage"));
 const RegisterPage = lazy(() => import("@/features/auth/RegisterPage"));
@@ -8,6 +9,14 @@ const BoardPage = lazy(() => import("@/features/board/BoardPage"));
 const BoardsListPage = lazy(
   () => import("@/features/boards-list/BoardsListPage"),
 );
+
+const ProtectedRoute = () => {
+  const { session } = useSession();
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;
+};
 
 export const AppRoutes = () => {
   return (
@@ -24,8 +33,10 @@ export const AppRoutes = () => {
     >
       <Routes>
         <Route path="/" element={<Navigate to="/boards" replace />} />
-        <Route path="/boards" element={<BoardsListPage />} />
-        <Route path="/boards/:boardId" element={<BoardPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/boards" element={<BoardsListPage />} />
+          <Route path="/boards/:boardId" element={<BoardPage />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
