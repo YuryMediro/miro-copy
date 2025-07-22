@@ -11,6 +11,9 @@ import { Input } from "@/shared/ui/kit/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye } from "lucide-react";
+import { useConfirmPasswordVisible, useVisible } from "../model/useVisible";
+import { useRegister } from "../model/use-register";
 
 const registerSchema = z
   .object({
@@ -38,10 +41,12 @@ export function RegisterForm() {
     },
   });
 
-  const onSubmit = form.handleSubmit((data) => {
-    console.log(data);
-    form.reset();
-  });
+  const { isPending, register } = useRegister();
+
+  const onSubmit = form.handleSubmit(register);
+
+  const passwordVisible = useVisible(false);
+  const confirmPasswordVisible = useConfirmPasswordVisible(false);
 
   return (
     <Form {...form}>
@@ -71,12 +76,19 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Пароль</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="******"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <div className="relative inline-block">
+                  <Input
+                    placeholder="******"
+                    type={passwordVisible.visible ? "text" : "password"}
+                    autoComplete="new-password"
+                    className="pr-[40px]"
+                    {...field}
+                  />
+                  <Eye
+                    className="absolute right-[10px] top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={passwordVisible.handleOnClick}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -89,18 +101,27 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Подтвердите пароль</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="******"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <div className="relative inline-block">
+                  <Input
+                    placeholder="******"
+                    type={confirmPasswordVisible.visible ? "text" : "password"}
+                    className="pr-[40px]"
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                  <Eye
+                    className="absolute right-[10px] top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={confirmPasswordVisible.handleOnClick}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Зарегистрироваться</Button>
+        <Button disabled={isPending} type="submit">
+          Зарегистрироваться
+        </Button>
       </form>
     </Form>
   );

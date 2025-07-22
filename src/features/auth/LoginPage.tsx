@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { AuthLayout } from "./auth-layout";
-import { LoginForm } from "./login-form";
+import { AuthLayout } from "./ui/auth-layout";
+import { LoginForm } from "./ui/login-form";
 
 export default function LoginPage() {
   return (
     <AuthLayout
       title="Вход в систему"
       description="Введите ваш email и пароль для входа в систему"
-      form={<LoginForm/>}
+      form={<LoginForm />}
       footerText={
         <>
           Нет аккаунта?{" "}

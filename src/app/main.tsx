@@ -4,6 +4,7 @@ import "./index.css";
 import { App } from "./app";
 import { BrowserRouter } from "react-router-dom";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
 
 async function enableMocking() {
   if (import.meta.env.PROD) {
@@ -19,6 +20,7 @@ enableMocking().then(() => {
     <StrictMode>
       <Providers>
         <BrowserRouter>
+          <Toaster />
           <App />
         </BrowserRouter>
       </Providers>

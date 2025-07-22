@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { AuthLayout } from "./auth-layout";
-import { RegisterForm } from "./register-form";
+import { AuthLayout } from "./ui/auth-layout";
+import { RegisterForm } from "./ui/register-form";
 
 export default function RegisterPage() {
   return (
     <AuthLayout
       title="Регистрация"
       description="Введите ваш email и пароль для регистрации в систему"
-      form={<RegisterForm/>}
+      form={<RegisterForm />}
       footerText={
         <>
           Уже есть аккаунт?{" "}

@@ -11,6 +11,9 @@ import { Input } from "@/shared/ui/kit/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye } from "lucide-react";
+import { useVisible } from "../model/useVisible";
+import { useLogin } from "../model/use-login";
 
 const loginSchema = z.object({
   email: z.email("Неверный формат email"),
@@ -31,10 +34,11 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = form.handleSubmit((data) => {
-    console.log(data);
-    form.reset();
-  });
+  const { isPending, login } = useLogin();
+
+  const onSubmit = form.handleSubmit(login);
+
+  const passwordVisible = useVisible(false);
 
   return (
     <Form {...form}>
@@ -64,19 +68,28 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Пароль</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="******"
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
-                
+                <div className="relative inline-block">
+                  <Input
+                    placeholder="******"
+                    autoComplete="new-password"
+                    className="pr-[40px]"
+                    type={passwordVisible.visible ? "text" : "password"}
+                    {...field}
+                  />
+                  <Eye
+                    className="absolute right-[10px] top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={passwordVisible.handleOnClick}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Войти</Button>
+
+        <Button disabled={isPending} type="submit">
+          Войти
+        </Button>
       </form>
     </Form>
   );
