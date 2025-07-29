@@ -23,6 +23,8 @@ import {
 } from "./model/useBoardsFilter";
 import { useDebounce } from "@/shared/lib/react";
 import useCreateBoard from "./model/use-create-board";
+import useDeleteBoard from "./model/useDeleteBoard";
+import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 
 export default function BoardsListPage() {
   const queryClient = useQueryClient();
@@ -33,18 +35,7 @@ export default function BoardsListPage() {
     search: useDebounce(boardsFilters.search, 300),
   });
   const createBoard = useCreateBoard();
-
-  const deleteBoardMutation = rqClient.useMutation(
-    "delete",
-    "/boards/{boardId}",
-    {
-      onSettled: async () => {
-        await queryClient.invalidateQueries(
-          rqClient.queryOptions("get", "/boards"),
-        );
-      },
-    },
-  );
+  const deleteBoard = useDeleteBoard();
 
   const toggleFavoriteMutation = rqClient.useMutation(
     "put",
@@ -157,17 +148,16 @@ export default function BoardsListPage() {
                   </div>
                 </CardHeader>
                 <CardFooter>
-                  <Button
-                    variant="destructive"
-                    disabled={deleteBoardMutation.isPending}
-                    onClick={() =>
-                      deleteBoardMutation.mutate({
-                        params: { path: { boardId: board.id } },
-                      })
-                    }
+                  <ConfirmModal
+                    handleClick={() => deleteBoard.deleteBoard(board.id)}
                   >
-                    Удалить
-                  </Button>
+                    <Button
+                      variant="destructive"
+                      disabled={deleteBoard.isPending}
+                    >
+                      Удалить
+                    </Button>
+                  </ConfirmModal>
                 </CardFooter>
               </Card>
             ))}
