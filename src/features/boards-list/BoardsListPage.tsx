@@ -1,4 +1,3 @@
-import { CONFIG } from "@/shared/model/config";
 import { Button } from "@/shared/ui/kit/button";
 import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
 import { Link } from "react-router-dom";
@@ -12,7 +11,6 @@ import {
   SelectValue,
 } from "@/shared/ui/kit/select";
 import { Switch } from "@/shared/ui/kit/switch";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/kit/tabs";
 import { useBoardsList } from "./model/useBoardsList";
 import {
   useBoardsFilters,
@@ -23,6 +21,9 @@ import useCreateBoard from "./model/use-create-board";
 import useDeleteBoard from "./model/useDeleteBoard";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import useToggleFavoriteBoard from "./model/useToggleFavoriteBoard";
+import { BoardsListLayout, BoardsListLayoutHeader } from "./BoardsListLayout";
+import { PlusIcon } from "lucide-react";
+import ViewToggleList from "./ViewToggleList";
 
 export default function BoardsListPage() {
   const boardsFilters = useBoardsFilters();
@@ -35,9 +36,23 @@ export default function BoardsListPage() {
   const handleToggleFavorite = useToggleFavoriteBoard();
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Доски {CONFIG.API_BASE_URL}</h1>
-
+    <BoardsListLayout
+      header={
+        <BoardsListLayoutHeader
+          title="Доски"
+          description="Здесь вы можете просматривать и управлять своими досками"
+          actions={
+            // <ViewToggleList />
+            <Button
+              disabled={createBoard.isPending}
+              onClick={createBoard.createBoard}
+            >
+              <PlusIcon /> Создать доску
+            </Button>
+          }
+        />
+      }
+    >
       <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-3">
           <Label htmlFor="search">Поиск</Label>
@@ -69,22 +84,6 @@ export default function BoardsListPage() {
             </SelectContent>
           </Select>
         </div>
-      </div>
-
-      <Tabs defaultValue="all" className="mb-6">
-        <TabsList>
-          <TabsTrigger value="all">Все доски</TabsTrigger>
-          <TabsTrigger value="favorites">Избранные</TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      <div className="mb-8">
-        <Button
-          disabled={createBoard.isPending}
-          onClick={createBoard.createBoard}
-        >
-          Создать доску
-        </Button>
       </div>
 
       {boardsQuery.isPending ? (
@@ -160,6 +159,6 @@ export default function BoardsListPage() {
           )}
         </>
       )}
-    </div>
+    </BoardsListLayout>
   );
 }
