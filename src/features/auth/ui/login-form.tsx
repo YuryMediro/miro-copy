@@ -12,8 +12,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "lucide-react";
-import { useVisible } from "../model/useVisible";
 import { useLogin } from "../model/use-login";
+import { useVisible } from "@/shared/lib/react";
 
 const loginSchema = z.object({
   email: z.email("Неверный формат email"),

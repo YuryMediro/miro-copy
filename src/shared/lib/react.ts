@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useVisible = (initial: boolean) => {
   const [visible, setVisible] = useState<boolean>(initial);
@@ -18,3 +18,14 @@ export const useConfirmPasswordVisible = (initial: boolean) => {
   };
   return { visible, handleOnClick };
 };
+
+export function useDebounce<T>(value: T, delay: number) {
+  const [debounceValue, setDebounceValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounceValue(value), delay);
+
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounceValue;
+}

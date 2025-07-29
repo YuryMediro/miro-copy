@@ -12,8 +12,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "lucide-react";
-import { useConfirmPasswordVisible, useVisible } from "../model/useVisible";
 import { useRegister } from "../model/use-register";
+import { useConfirmPasswordVisible, useVisible } from "@/shared/lib/react";
 
 const registerSchema = z
   .object({
