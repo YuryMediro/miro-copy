@@ -1,8 +1,6 @@
-import { rqClient } from "@/shared/api/instance";
 import { CONFIG } from "@/shared/model/config";
 import { Button } from "@/shared/ui/kit/button";
 import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
-import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Input } from "@/shared/ui/kit/input";
 import { Label } from "@/shared/ui/kit/label";
@@ -15,7 +13,6 @@ import {
 } from "@/shared/ui/kit/select";
 import { Switch } from "@/shared/ui/kit/switch";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/kit/tabs";
-import type { ApiSchemas } from "@/shared/api/schema";
 import { useBoardsList } from "./model/useBoardsList";
 import {
   useBoardsFilters,
@@ -25,10 +22,9 @@ import { useDebounce } from "@/shared/lib/react";
 import useCreateBoard from "./model/use-create-board";
 import useDeleteBoard from "./model/useDeleteBoard";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
+import useToggleFavoriteBoard from "./model/useToggleFavoriteBoard";
 
 export default function BoardsListPage() {
-  const queryClient = useQueryClient();
-
   const boardsFilters = useBoardsFilters();
   const boardsQuery = useBoardsList({
     sort: boardsFilters.sort,
@@ -36,25 +32,7 @@ export default function BoardsListPage() {
   });
   const createBoard = useCreateBoard();
   const deleteBoard = useDeleteBoard();
-
-  const toggleFavoriteMutation = rqClient.useMutation(
-    "put",
-    "/boards/{boardId}/favorite",
-    {
-      onSettled: async () => {
-        await queryClient.invalidateQueries(
-          rqClient.queryOptions("get", "/boards"),
-        );
-      },
-    },
-  );
-
-  const handleToggleFavorite = (board: ApiSchemas["Board"]) => {
-    toggleFavoriteMutation.mutate({
-      params: { path: { boardId: board.id } },
-      body: { isFavorite: !board.isFavorite },
-    });
-  };
+  const handleToggleFavorite = useToggleFavoriteBoard();
 
   return (
     <div className="container mx-auto p-4">
@@ -121,8 +99,15 @@ export default function BoardsListPage() {
                     {board.isFavorite ? "В избранном" : ""}
                   </span>
                   <Switch
+                    className="cursor-pointer"
                     checked={board.isFavorite}
-                    onCheckedChange={() => handleToggleFavorite(board)}
+                    onCheckedChange={() =>
+                      handleToggleFavorite.handleToggleFavorite(
+                        board.id,
+                        !board.isFavorite,
+                      )
+                    }
+                    disabled={handleToggleFavorite.isPending(board.id)}
                   />
                 </div>
                 <CardHeader>
@@ -153,7 +138,7 @@ export default function BoardsListPage() {
                   >
                     <Button
                       variant="destructive"
-                      disabled={deleteBoard.isPending}
+                      disabled={deleteBoard.isPending(board.id)}
                     >
                       Удалить
                     </Button>

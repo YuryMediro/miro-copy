@@ -41,6 +41,7 @@ export default function useDeleteBoard() {
       deleteBoardMutation.mutate({
         params: { path: { boardId } },
       }),
-    isPending: deleteBoardMutation.isPending,
+    isPending: (boardId: string) =>
+      deleteBoardMutation.isPending && deleteBoardMutation.variables?.params?.path?.boardId === boardId,
   };
 }

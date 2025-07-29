@@ -15,5 +15,18 @@ export default function useToggleFavoriteBoard() {
       },
     },
   );
-  return;
+
+  const handleToggleFavorite = (boardId: string, isFavorite: boolean) => {
+    toggleFavoriteMutation.mutate({
+      params: { path: { boardId } },
+      body: { isFavorite },
+    });
+  };
+
+  return {
+    handleToggleFavorite,
+    isPending: (boardId: string) =>
+      toggleFavoriteMutation.isPending &&
+      toggleFavoriteMutation.variables?.params?.path?.boardId === boardId,
+  };
 }
