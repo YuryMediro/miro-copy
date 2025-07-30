@@ -1,29 +1,25 @@
 import { Button } from "@/shared/ui/kit/button";
 import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
 import { Link } from "react-router-dom";
-import { Input } from "@/shared/ui/kit/input";
 import { Label } from "@/shared/ui/kit/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/ui/kit/select";
+
 import { Switch } from "@/shared/ui/kit/switch";
 import { useBoardsList } from "./model/useBoardsList";
-import {
-  useBoardsFilters,
-  type BoardsSortOption,
-} from "./model/useBoardsFilter";
+import { useBoardsFilters } from "./model/useBoardsFilter";
 import { useDebounce } from "@/shared/lib/react";
 import useCreateBoard from "./model/use-create-board";
 import useDeleteBoard from "./model/useDeleteBoard";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import useToggleFavoriteBoard from "./model/useToggleFavoriteBoard";
-import { BoardsListLayout, BoardsListLayoutHeader } from "./BoardsListLayout";
+import {
+  BoardsListLayout,
+  BoardsListLayoutFilters,
+  BoardsListLayoutHeader,
+} from "./BoardsListLayout";
 import { PlusIcon } from "lucide-react";
 import ViewToggleList from "./ViewToggleList";
+import BoardsSearchInput from "./BoardsSearchInput";
+import BoardsSortFilter from "./BoardsSortFilter";
 
 export default function BoardsListPage() {
   const boardsFilters = useBoardsFilters();
@@ -42,7 +38,6 @@ export default function BoardsListPage() {
           title="Доски"
           description="Здесь вы можете просматривать и управлять своими досками"
           actions={
-            // <ViewToggleList />
             <Button
               disabled={createBoard.isPending}
               onClick={createBoard.createBoard}
@@ -52,37 +47,27 @@ export default function BoardsListPage() {
           }
         />
       }
+      filters={
+        <BoardsListLayoutFilters
+          filters={
+            <BoardsSearchInput
+              value={boardsFilters.search}
+              onChange={boardsFilters.setSearch}
+            />
+          }
+          sort={
+            <BoardsSortFilter
+              value={boardsFilters.sort}
+              onValueChange={boardsFilters.setSort}
+            />
+          }
+          actions={<ViewToggleList />}
+        />
+      }
     >
       <div className="mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-3">
           <Label htmlFor="search">Поиск</Label>
-          <Input
-            id="search"
-            placeholder="Введите название доски..."
-            value={boardsFilters.search}
-            onChange={(e) => boardsFilters.setSearch(e.target.value)}
-            className="w-full"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <Label htmlFor="sort">Сортировка</Label>
-          <Select
-            value={boardsFilters.sort}
-            onValueChange={(value) =>
-              boardsFilters.setSort(value as BoardsSortOption)
-            }
-          >
-            <SelectTrigger id="sort" className="w-full">
-              <SelectValue placeholder="Сортировка" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="lastOpenedAt">По дате открытия</SelectItem>
-              <SelectItem value="createdAt">По дате создания</SelectItem>
-              <SelectItem value="updatedAt">По дате обновления</SelectItem>
-              <SelectItem value="name">По имени</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       </div>
 
