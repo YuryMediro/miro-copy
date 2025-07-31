@@ -15,5 +15,5 @@ export function useBoardsFilters() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<BoardsSortOption>("lastOpenedAt");
 
-  return { search, sort,  setSearch, setSort };
+  return { search, sort, setSearch, setSort };
 }

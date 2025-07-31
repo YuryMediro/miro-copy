@@ -1,4 +1,4 @@
-import { publicRqClient} from "@/shared/api/instance";
+import { publicRqClient } from "@/shared/api/instance";
 import type { ApiSchemas } from "@/shared/api/schema";
 import { useSession } from "@/shared/model/session";
 import toast from "react-hot-toast";

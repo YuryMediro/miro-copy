@@ -33,7 +33,11 @@ export function useBoardsList({
       {
         initialPageParam: 1,
         pageParamName: "page",
-        getNextPageParam: (lastPage: { totalPages: number }, _: any, lastPageParams: number) =>
+        getNextPageParam: (
+          lastPage: { totalPages: number },
+          _: any,
+          lastPageParams: number,
+        ) =>
           Number(lastPageParams) < lastPage.totalPages
             ? Number(lastPageParams) + 1
             : null,

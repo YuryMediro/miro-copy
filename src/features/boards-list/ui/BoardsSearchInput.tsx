@@ -5,7 +5,10 @@ interface BoardsSearchInputProps {
   onChange: (value: string) => void;
 }
 
-export default function BoardsSearchInput({ onChange, value }: BoardsSearchInputProps) {
+export default function BoardsSearchInput({
+  onChange,
+  value,
+}: BoardsSearchInputProps) {
   return (
     <Input
       id="search"

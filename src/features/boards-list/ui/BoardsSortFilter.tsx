@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/kit/select";
-import type { BoardsSortOption } from "./model/useBoardsFilter";
+import type { BoardsSortOption } from "../model/useBoardsFilter";
 
 interface BoardsSortFilter {
   value: string;
