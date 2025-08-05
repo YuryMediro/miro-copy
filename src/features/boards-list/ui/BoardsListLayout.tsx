@@ -48,10 +48,12 @@ export function BoardsListLayoutFilters({
   return (
     <div className="flex items-center gap-4">
       <div className="flex items-center gap-2">
-        <p className="text-sm text-gray-500">Search by</p> {search}
+        <p className="text-sm text-gray-500 whitespace-nowrap">Search by</p>{" "}
+        {search}
       </div>
       <div className="flex items-center gap-2">
-        <p className="text-sm text-gray-500">Sort by</p> {sort}
+        <p className="text-sm text-gray-500 whitespace-nowrap">Sort by</p>{" "}
+        {sort}
       </div>
       {actions && <div className="ml-auto">{actions}</div>}
     </div>
