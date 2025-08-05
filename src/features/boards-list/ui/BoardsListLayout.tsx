@@ -67,7 +67,7 @@ export default function BoardsListLayoutContent({
   isEmpty,
 }: {
   children: React.ReactNode;
-  cursorRef?: React.RefObject<HTMLDivElement>;
+  cursorRef?: React.Ref<HTMLDivElement>;
   isPending?: boolean;
   hasCursor?: boolean;
   isPendingNext?: boolean;
@@ -98,7 +98,7 @@ export function BoardsListLayoutCards({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {children}
     </div>
   );

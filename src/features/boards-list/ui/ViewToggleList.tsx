@@ -6,12 +6,24 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/kit/tooltip";
 
-export default function ViewToggleList() {
+export type ViewMode = "list" | "grid";
+
+export default function ViewToggleList({
+  value,
+  onChange,
+}: {
+  value: ViewMode;
+  onChange: (value: ViewMode) => void;
+}) {
   return (
-    <Tabs defaultValue="all" className="mb-6">
+    <Tabs
+      defaultValue={value}
+      onValueChange={(e) => onChange(e as ViewMode)}
+      className="mb-6"
+    >
       <TabsList>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <TabsTrigger value="list">
               <ListIcon />
             </TabsTrigger>
@@ -22,7 +34,7 @@ export default function ViewToggleList() {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <TabsTrigger value="grid">
               <LayoutGrid />
             </TabsTrigger>
