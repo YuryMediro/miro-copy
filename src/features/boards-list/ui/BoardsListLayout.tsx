@@ -5,7 +5,7 @@ export function BoardsListLayout({
 }: {
   header: React.ReactNode;
   children: React.ReactNode;
-  filters: React.ReactNode;
+  filters?: React.ReactNode;
 }) {
   return (
     <div className="container mx-auto p-4 flex flex-col gap-4">
