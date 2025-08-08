@@ -1,4 +1,9 @@
 import { cn } from "@/shared/lib/css";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/ui/kit/tooltip";
 import { StarIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -44,21 +49,28 @@ export default function BoardFavoriteToggle({
   };
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={disabled}
-      className={cn(
-        "p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer",
-        disabled && "opacity-50 cursor-not-allowed",
-        className,
-      )}
-    >
-      <StarIcon
-        className={cn(
-          "w-5 h-5",
-          isFavorite ? "fill-yellow-400 text-yellow-400" : "text-gray-400",
-        )}
-      />
-    </button>
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild>
+        <button
+          onClick={handleClick}
+          disabled={disabled}
+          className={cn(
+            "p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer",
+            disabled && "opacity-50 cursor-not-allowed",
+            className,
+          )}
+        >
+          <StarIcon
+            className={cn(
+              "w-5 h-5",
+              isFavorite ? "fill-yellow-400 text-yellow-400" : "text-gray-400",
+            )}
+          />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{isFavorite ? "Удалить из избранного" : "Добавить в избранное"}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

@@ -22,8 +22,8 @@ export default function ViewToggleList({
       className="mb-6"
     >
       <TabsList>
-        <Tooltip>
-          <TooltipTrigger asChild>
+        <Tooltip delayDuration={500}>
+          <TooltipTrigger asChild className="cursor-pointer">
             <TabsTrigger value="list">
               <ListIcon />
             </TabsTrigger>
@@ -33,8 +33,8 @@ export default function ViewToggleList({
           </TooltipContent>
         </Tooltip>
 
-        <Tooltip>
-          <TooltipTrigger asChild>
+        <Tooltip delayDuration={500}>
+          <TooltipTrigger asChild className="cursor-pointer">
             <TabsTrigger value="grid">
               <LayoutGrid />
             </TabsTrigger>
