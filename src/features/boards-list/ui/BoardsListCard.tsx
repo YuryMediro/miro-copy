@@ -1,8 +1,6 @@
 import { Button } from "@/shared/ui/kit/button";
 import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
-import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import { Link } from "react-router-dom";
-import BoardFavoriteToggle from "./BoardFavoriteToggle";
 
 interface BoardsListCardProps {
   board: {
@@ -11,30 +9,18 @@ interface BoardsListCardProps {
     lastOpenedAt: string;
     name: string;
   };
-  isFavorite: boolean;
-  isFavoriteToggle: () => void;
-  isPendingToggle: (boardId: string) => boolean;
-  isPendingDelete: (boardId: string) => boolean;
-  onDeleteBoard: (boardId: string) => void;
+  rightTopActions?: React.ReactNode;
+  bottomActions?: React.ReactNode;
 }
 
 export default function BoardsListCard({
-  isFavorite,
-  isFavoriteToggle,
   board,
-  isPendingToggle,
-  isPendingDelete,
-  onDeleteBoard,
+  rightTopActions,
+  bottomActions,
 }: BoardsListCardProps) {
   return (
     <Card className="relative hover:bg-gray-200">
-      <div className="absolute top-2 right-2 ">
-        <BoardFavoriteToggle
-          isFavorite={isFavorite}
-          isFavoriteToggle={isFavoriteToggle}
-          disabled={isPendingToggle(board.id)}
-        />
-      </div>
+      {<div className="absolute top-2 right-2 ">{rightTopActions}</div>}
       <CardHeader>
         <div className="flex flex-col gap-2">
           <Button
@@ -55,13 +41,8 @@ export default function BoardsListCard({
           </div>
         </div>
       </CardHeader>
-      <CardFooter>
-        <ConfirmModal handleClick={() => onDeleteBoard(board.id)}>
-          <Button variant="destructive" disabled={isPendingDelete(board.id)}>
-            Удалить
-          </Button>
-        </ConfirmModal>
-      </CardFooter>
+      {bottomActions && <CardFooter>{bottomActions}</CardFooter>}
+      <CardFooter></CardFooter>
     </Card>
   );
 }

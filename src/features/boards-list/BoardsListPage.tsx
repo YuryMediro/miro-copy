@@ -19,6 +19,8 @@ import BoardsSortFilter from "./ui/BoardsSortFilter";
 import BoardsListLayoutContent from "./ui/BoardsListLayout";
 import BoardsListCard from "./ui/BoardsListCard";
 import { useState } from "react";
+import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
+import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 
 export default function BoardsListPage() {
   const boardsFilters = useBoardsFilters();
@@ -83,16 +85,30 @@ export default function BoardsListPage() {
               <BoardsListCard
                 key={board.id}
                 board={board}
-                isFavorite={board.isFavorite}
-                isFavoriteToggle={() =>
-                  handleToggleFavorite.handleToggleFavorite(
-                    board.id,
-                    !board.isFavorite,
-                  )
+                rightTopActions={
+                  <BoardFavoriteToggle
+                    isFavorite={board.isFavorite}
+                    isFavoriteToggle={() =>
+                      handleToggleFavorite.handleToggleFavorite(
+                        board.id,
+                        !board.isFavorite,
+                      )
+                    }
+                    disabled={handleToggleFavorite.isPending(board.id)}
+                  />
                 }
-                isPendingDelete={deleteBoard.isPending}
-                isPendingToggle={handleToggleFavorite.isPending}
-                onDeleteBoard={deleteBoard.deleteBoard}
+                bottomActions={
+                  <ConfirmModal
+                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+                  >
+                    <Button
+                      variant="destructive"
+                      disabled={deleteBoard.isPending(board.id)}
+                    >
+                      Удалить
+                    </Button>
+                  </ConfirmModal>
+                }
               />
             ))}
           </BoardsListListLayout>
@@ -102,16 +118,30 @@ export default function BoardsListPage() {
               <BoardsListCard
                 key={board.id}
                 board={board}
-                isFavorite={board.isFavorite}
-                isFavoriteToggle={() =>
-                  handleToggleFavorite.handleToggleFavorite(
-                    board.id,
-                    !board.isFavorite,
-                  )
+                rightTopActions={
+                  <BoardFavoriteToggle
+                    isFavorite={board.isFavorite}
+                    isFavoriteToggle={() =>
+                      handleToggleFavorite.handleToggleFavorite(
+                        board.id,
+                        !board.isFavorite,
+                      )
+                    }
+                    disabled={handleToggleFavorite.isPending(board.id)}
+                  />
                 }
-                isPendingDelete={deleteBoard.isPending}
-                isPendingToggle={handleToggleFavorite.isPending}
-                onDeleteBoard={deleteBoard.deleteBoard}
+                bottomActions={
+                  <ConfirmModal
+                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+                  >
+                    <Button
+                      variant="destructive"
+                      disabled={deleteBoard.isPending(board.id)}
+                    >
+                      Удалить
+                    </Button>
+                  </ConfirmModal>
+                }
               />
             ))}
           </BoardsListLayoutCards>
