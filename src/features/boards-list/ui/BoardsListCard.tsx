@@ -27,9 +27,13 @@ export default function BoardsListCard({
   onDeleteBoard,
 }: BoardsListCardProps) {
   return (
-    <Card className="relative">
+    <Card className="relative hover:bg-gray-200">
       <div className="absolute top-2 right-2 ">
-        <BoardFavoriteToggle isFavorite={isFavorite} isFavoriteToggle={isFavoriteToggle} disabled={isPendingToggle(board.id)} /> 
+        <BoardFavoriteToggle
+          isFavorite={isFavorite}
+          isFavoriteToggle={isFavoriteToggle}
+          disabled={isPendingToggle(board.id)}
+        />
       </div>
       <CardHeader>
         <div className="flex flex-col gap-2">
