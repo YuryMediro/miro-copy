@@ -1,8 +1,8 @@
 import { Button } from "@/shared/ui/kit/button";
 import { Card, CardFooter, CardHeader } from "@/shared/ui/kit/card";
-import { Switch } from "@/shared/ui/kit/switch";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import { Link } from "react-router-dom";
+import BoardFavoriteToggle from "./BoardFavoriteToggle";
 
 interface BoardsListCardProps {
   board: {
@@ -28,16 +28,8 @@ export default function BoardsListCard({
 }: BoardsListCardProps) {
   return (
     <Card className="relative">
-      <div className="absolute top-2 right-2 flex items-center gap-2">
-        <span className="text-sm text-gray-500">
-          {isFavorite ? "В избранном" : ""}
-        </span>
-        <Switch
-          className="cursor-pointer"
-          checked={isFavorite}
-          onCheckedChange={isFavoriteToggle}
-          disabled={isPendingToggle(board.id)}
-        />
+      <div className="absolute top-2 right-2 ">
+        <BoardFavoriteToggle isFavorite={isFavorite} isFavoriteToggle={isFavoriteToggle} disabled={isPendingToggle(board.id)} /> 
       </div>
       <CardHeader>
         <div className="flex flex-col gap-2">
