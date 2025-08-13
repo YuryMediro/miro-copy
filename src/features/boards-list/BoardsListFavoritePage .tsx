@@ -3,12 +3,10 @@ import useDeleteBoard from "./model/useDeleteBoard";
 import useToggleFavoriteBoard from "./model/useToggleFavoriteBoard";
 import {
   BoardsListLayout,
-  BoardsListLayoutCards,
+  BoardsListLayoutContent,
   BoardsListLayoutHeader,
-  BoardsListListLayout,
 } from "./ui/BoardsListLayout";
 import ViewToggleList, { type ViewMode } from "./ui/ViewToggleList";
-import BoardsListLayoutContent from "./ui/BoardsListLayout";
 import BoardsListCard from "./ui/BoardsListCard";
 import { useState } from "react";
 import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
@@ -44,75 +42,73 @@ export default function BoardsListFavoritePage() {
         isPendingNext={boardsQuery.isFetchingNextPage}
         hasCursor={boardsQuery.hasNextPage}
         isEmpty={boardsQuery.boards.length === 0}
-      >
-        {viewMode === "list" ? (
-          <BoardsListListLayout>
-            {boardsQuery.boards.map((board) => (
-              <BoardsListCard
-                key={board.id}
-                board={board}
-                rightTopActions={
-                  <BoardFavoriteToggle
-                    isFavorite={board.isFavorite}
-                    isFavoriteToggle={() =>
-                      handleToggleFavorite.handleToggleFavorite(
-                        board.id,
-                        !board.isFavorite,
-                      )
-                    }
-                    disabled={handleToggleFavorite.isPending(board.id)}
-                  />
-                }
-                bottomActions={
-                  <ConfirmModal
-                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+        cursorRef={boardsQuery.cursorRef}
+        mode={viewMode}
+        renderList={() =>
+          boardsQuery.boards.map((board) => (
+            <BoardsListCard
+              key={board.id}
+              board={board}
+              rightTopActions={
+                <BoardFavoriteToggle
+                  isFavorite={board.isFavorite}
+                  isFavoriteToggle={() =>
+                    handleToggleFavorite.handleToggleFavorite(
+                      board.id,
+                      !board.isFavorite,
+                    )
+                  }
+                  disabled={handleToggleFavorite.isPending(board.id)}
+                />
+              }
+              bottomActions={
+                <ConfirmModal
+                  handleClick={() => deleteBoard.deleteBoard(board.id)}
+                >
+                  <Button
+                    variant="destructive"
+                    disabled={deleteBoard.isPending(board.id)}
                   >
-                    <Button
-                      variant="destructive"
-                      disabled={deleteBoard.isPending(board.id)}
-                    >
-                      Удалить
-                    </Button>
-                  </ConfirmModal>
-                }
-              />
-            ))}
-          </BoardsListListLayout>
-        ) : (
-          <BoardsListLayoutCards>
-            {boardsQuery.boards.map((board) => (
-              <BoardsListCard
-                key={board.id}
-                board={board}
-                rightTopActions={
-                  <BoardFavoriteToggle
-                    isFavorite={board.isFavorite}
-                    isFavoriteToggle={() =>
-                      handleToggleFavorite.handleToggleFavorite(
-                        board.id,
-                        !board.isFavorite,
-                      )
-                    }
-                    disabled={handleToggleFavorite.isPending(board.id)}
-                  />
-                }
-                bottomActions={
-                  <ConfirmModal
-                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+                    Удалить
+                  </Button>
+                </ConfirmModal>
+              }
+            />
+          ))
+        }
+        renderGrid={() =>
+          boardsQuery.boards.map((board) => (
+            <BoardsListCard
+              key={board.id}
+              board={board}
+              rightTopActions={
+                <BoardFavoriteToggle
+                  isFavorite={board.isFavorite}
+                  isFavoriteToggle={() =>
+                    handleToggleFavorite.handleToggleFavorite(
+                      board.id,
+                      !board.isFavorite,
+                    )
+                  }
+                  disabled={handleToggleFavorite.isPending(board.id)}
+                />
+              }
+              bottomActions={
+                <ConfirmModal
+                  handleClick={() => deleteBoard.deleteBoard(board.id)}
+                >
+                  <Button
+                    variant="destructive"
+                    disabled={deleteBoard.isPending(board.id)}
                   >
-                    <Button
-                      variant="destructive"
-                      disabled={deleteBoard.isPending(board.id)}
-                    >
-                      Удалить
-                    </Button>
-                  </ConfirmModal>
-                }
-              />
-            ))}
-          </BoardsListLayoutCards>
-        )}
-      </BoardsListLayoutContent>
+                    Удалить
+                  </Button>
+                </ConfirmModal>
+              }
+            />
+          ))
+        }
+      />
     </BoardsListLayout>
   );
 }
