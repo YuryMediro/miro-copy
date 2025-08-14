@@ -12,6 +12,7 @@ import { useState } from "react";
 import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import { Button } from "@/shared/ui/kit/button";
+import BoardsListItem from "./ui/BoardsListItem";
 
 export default function BoardsListFavoritePage() {
   const boardsQuery = useBoardsList({
@@ -46,10 +47,10 @@ export default function BoardsListFavoritePage() {
         mode={viewMode}
         renderList={() =>
           boardsQuery.boards.map((board) => (
-            <BoardsListCard
+            <BoardsListItem
               key={board.id}
               board={board}
-              rightTopActions={
+              rightActions={
                 <BoardFavoriteToggle
                   isFavorite={board.isFavorite}
                   isFavoriteToggle={() =>
@@ -61,12 +62,13 @@ export default function BoardsListFavoritePage() {
                   disabled={handleToggleFavorite.isPending(board.id)}
                 />
               }
-              bottomActions={
+              menuActions={
                 <ConfirmModal
                   handleClick={() => deleteBoard.deleteBoard(board.id)}
                 >
                   <Button
-                    variant="destructive"
+                    variant="ghost"
+                    className="text-red-500 hover:text-red-500/90"
                     disabled={deleteBoard.isPending(board.id)}
                   >
                     Удалить

@@ -36,7 +36,7 @@ export const AppRoutes = () => {
         <Route path="/" element={<Navigate to="/boards" replace />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/boards" element={<BoardsListPage />} />
-          {/* <Route path="/boards" element={<BoardsListFavoritePage />} /> */}
+          <Route path="/boards/favorite" element={<BoardsListFavoritePage />} />
           <Route path="/boards/:boardId" element={<BoardPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
