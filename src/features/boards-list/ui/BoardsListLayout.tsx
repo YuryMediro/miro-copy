@@ -4,16 +4,28 @@ export function BoardsListLayout({
   header,
   children,
   filters,
+  sidebar,
+  templates,
 }: {
   header: React.ReactNode;
   children: React.ReactNode;
   filters?: React.ReactNode;
+  templates?: React.ReactNode;
+  sidebar?: React.ReactNode;
 }) {
   return (
-    <div className="container mx-auto p-4 flex flex-col gap-4">
-      {header}
-      {filters}
-      {children}
+    <div className="container mx-auto">
+      <div className="flex gap-4">
+        {sidebar}
+        <div className="flex-1  p-4 flex flex-col gap-6">
+          {templates && (
+            <div className="rounded-md bg-gray-100 p-4">{templates}</div>
+          )}
+          {header}
+          {filters}
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

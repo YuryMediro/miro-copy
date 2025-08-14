@@ -1,34 +1,24 @@
-import { Button } from "@/shared/ui/kit/button";
 import { useBoardsList } from "./model/useBoardsList";
-import { useBoardsFilters } from "./model/useBoardsFilter";
-import { useDebounce } from "@/shared/lib/react";
-import useCreateBoard from "./model/use-create-board";
 import useDeleteBoard from "./model/useDeleteBoard";
 import useToggleFavoriteBoard from "./model/useToggleFavoriteBoard";
 import {
   BoardsListLayout,
   BoardsListLayoutContent,
-  BoardsListLayoutFilters,
   BoardsListLayoutHeader,
 } from "./ui/BoardsListLayout";
-import { PlusIcon } from "lucide-react";
 import ViewToggleList, { type ViewMode } from "./ui/ViewToggleList";
-import BoardsSearchInput from "./ui/BoardsSearchInput";
-import BoardsSortFilter from "./ui/BoardsSortFilter";
 import BoardsListCard from "./ui/BoardsListCard";
 import { useState } from "react";
 import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
+import { Button } from "@/shared/ui/kit/button";
 import BoardsListItem from "./ui/BoardsListItem";
 import BoardsSidebar from "./ui/BoardsSidebar";
 
-export default function BoardsListPage() {
-  const boardsFilters = useBoardsFilters();
+export default function BoardsListRecentPage() {
   const boardsQuery = useBoardsList({
-    sort: boardsFilters.sort,
-    search: useDebounce(boardsFilters.search, 300),
+    isFavorite: true,
   });
-  const createBoard = useCreateBoard();
   const deleteBoard = useDeleteBoard();
   const handleToggleFavorite = useToggleFavoriteBoard();
 
@@ -39,32 +29,8 @@ export default function BoardsListPage() {
       sidebar={<BoardsSidebar />}
       header={
         <BoardsListLayoutHeader
-          title="Доски"
-          description="Здесь вы можете просматривать и управлять своими досками"
-          actions={
-            <Button
-              disabled={createBoard.isPending}
-              onClick={createBoard.createBoard}
-            >
-              <PlusIcon /> Создать доску
-            </Button>
-          }
-        />
-      }
-      filters={
-        <BoardsListLayoutFilters
-          search={
-            <BoardsSearchInput
-              value={boardsFilters.search}
-              onChange={boardsFilters.setSearch}
-            />
-          }
-          sort={
-            <BoardsSortFilter
-              value={boardsFilters.sort}
-              onValueChange={boardsFilters.setSort}
-            />
-          }
+          title="Недавние"
+          description="Здесь вы можете просматривать и управлять своими избранными досками"
           actions={
             <ViewToggleList
               value={viewMode}

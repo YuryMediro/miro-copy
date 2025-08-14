@@ -13,6 +13,7 @@ import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import { Button } from "@/shared/ui/kit/button";
 import BoardsListItem from "./ui/BoardsListItem";
+import BoardsSidebar from "./ui/BoardsSidebar";
 
 export default function BoardsListFavoritePage() {
   const boardsQuery = useBoardsList({
@@ -25,6 +26,7 @@ export default function BoardsListFavoritePage() {
 
   return (
     <BoardsListLayout
+      sidebar={<BoardsSidebar />}
       header={
         <BoardsListLayoutHeader
           title="Избранные доски"

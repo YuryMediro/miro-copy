@@ -1,4 +1,5 @@
 import BoardsListFavoritePage from "@/features/boards-list/BoardsListFavoritePage ";
+import BoardsListRecentPage from "@/features/boards-list/BoardsListRecentPage";
 import { useSession } from "@/shared/model/session";
 import { Skeleton } from "@/shared/ui/kit/skeleton";
 import { Suspense, lazy } from "react";
@@ -37,6 +38,7 @@ export const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/boards" element={<BoardsListPage />} />
           <Route path="/boards/favorite" element={<BoardsListFavoritePage />} />
+          <Route path="/boards/recent" element={<BoardsListRecentPage />} />
           <Route path="/boards/:boardId" element={<BoardPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

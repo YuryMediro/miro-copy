@@ -13,9 +13,6 @@ export function AppHeader() {
         <Link to={"/boards"}>
           <div className="text-xl font-semibold">Miro Copy</div>
         </Link>
-        <Link to={"/boards/favorite"}>
-          <Button variant="link">Favorite</Button>
-        </Link>
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">{session.email}</span>
           <Button
