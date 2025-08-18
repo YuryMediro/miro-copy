@@ -21,6 +21,9 @@ import BoardFavoriteToggle from "./ui/BoardFavoriteToggle";
 import ConfirmModal from "@/shared/ui/modals/ConfirmModal";
 import BoardsListItem from "./ui/BoardsListItem";
 import BoardsSidebar from "./ui/BoardsSidebar";
+import TemplatesGallery from "../boardTemplates/templatesGallery";
+import { useTemplateModal } from "../boardTemplates/useTemplatesModal";
+import TemplatesModal from "../boardTemplates/templatesModal";
 
 export default function BoardsListPage() {
   const boardsFilters = useBoardsFilters();
@@ -31,23 +34,30 @@ export default function BoardsListPage() {
   const createBoard = useCreateBoard();
   const deleteBoard = useDeleteBoard();
   const handleToggleFavorite = useToggleFavoriteBoard();
+  
+  const templateModal = useTemplateModal()
 
   const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   return (
+    <>
+    <TemplatesModal/>
     <BoardsListLayout
+    templates={<TemplatesGallery/>}
       sidebar={<BoardsSidebar />}
       header={
         <BoardsListLayoutHeader
           title="Доски"
           description="Здесь вы можете просматривать и управлять своими досками"
           actions={
+            <>
+            <Button variant='outline' onClick={() => templateModal.open()}>Выбрать шаблон</Button>
             <Button
               disabled={createBoard.isPending}
               onClick={createBoard.createBoard}
             >
               <PlusIcon /> Создать доску
-            </Button>
+            </Button></>
           }
         />
       }
@@ -148,5 +158,6 @@ export default function BoardsListPage() {
         }
       />
     </BoardsListLayout>
+    </>
   );
 }
