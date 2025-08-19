@@ -1,49 +1,36 @@
 import { Button } from "@/shared/ui/kit/button";
 import { ArrowRight, StickerIcon } from "lucide-react";
-import { useNodes } from "./nodes";
+import { useNodes } from "./model/nodes";
 import { useBoardViewState } from "./viewState";
-import { useCallback, type RefCallback, type Ref, useState } from "react";
-
-type CanvasRef = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
-const useCanvasRect = () => {
-  const [canvasRect, setCanvasRef] = useState<CanvasRef>();
-
-  const canvasRef: RefCallback<HTMLDivElement> = useCallback((el) => {
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-
-        const { x, y } = entry.target.getBoundingClientRect();
-
-        setCanvasRef({ x, y, width, height });
-      }
-    });
-
-    if (el) {
-      observer.observe(el);
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, []);
-
-  return { canvasRef, canvasRect };
-};
+import { useCanvasRect } from "./hooks/useCanvasRect";
+import type { Ref } from "react";
+import type React from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/ui/kit/tooltip";
 
 export default function BoardPage() {
   const { nodes, addSticker } = useNodes();
   const { viewState, goToAddSticker, goToIdle } = useBoardViewState();
   const { canvasRef, canvasRect } = useCanvasRect();
-  console.log(canvasRect);
 
   return (
-    <Layout>
+    <Layout
+      onKeyDown={(e) => {
+        if (viewState.type === "add-sticker") {
+          if (e.key === "Escape") {
+            goToIdle();
+          }
+        }
+        if (viewState.type === "idle") {
+          if (e.key === "s") {
+            goToAddSticker();
+          }
+        }
+      }}
+    >
       <Dots />
       <Canvas
         ref={canvasRef}
@@ -63,18 +50,32 @@ export default function BoardPage() {
         ))}
       </Canvas>
       <Actions>
-        <ActionButton
-          isActive={viewState.type === "add-sticker"}
-          onClick={() => {
-            if (viewState.type === "add-sticker") {
-              goToIdle();
-            } else {
-              goToAddSticker();
-            }
-          }}
-        >
-          <StickerIcon />
-        </ActionButton>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <ActionButton
+                isActive={viewState.type === "add-sticker"}
+                onClick={() => {
+                  if (viewState.type === "add-sticker") {
+                    goToIdle();
+                  } else {
+                    goToAddSticker();
+                  }
+                }}
+              >
+                <StickerIcon />
+              </ActionButton>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <p className="flex items-center gap-2 text-xs font-medium">
+              Добавить стикер
+              <span className="inline-flex items-center justify-center w-5 h-5 border border-gray-600 bg-gray-600 rounded-sm">
+                S
+              </span>
+            </p>
+          </TooltipContent>
+        </Tooltip>
         <ActionButton isActive={false} onClick={() => {}}>
           <ArrowRight />
         </ActionButton>
@@ -83,9 +84,12 @@ export default function BoardPage() {
   );
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({
+  children,
+  ...props
+}: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="grow relative" tabIndex={0}>
+    <div className="grow relative" tabIndex={0} {...props}>
       {children}
     </div>
   );
