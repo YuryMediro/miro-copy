@@ -9,7 +9,7 @@ export function App() {
     location.pathname === "/login" || location.pathname === "/register";
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-300">
+    <div className="min-h-screen flex flex-col">
       {!isAuthPage && <AppHeader />}
       <AppRoutes />
     </div>

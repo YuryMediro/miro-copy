@@ -34,130 +34,133 @@ export default function BoardsListPage() {
   const createBoard = useCreateBoard();
   const deleteBoard = useDeleteBoard();
   const handleToggleFavorite = useToggleFavoriteBoard();
-  
-  const templateModal = useTemplateModal()
+
+  const templateModal = useTemplateModal();
 
   const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   return (
     <>
-    <TemplatesModal/>
-    <BoardsListLayout
-    templates={<TemplatesGallery/>}
-      sidebar={<BoardsSidebar />}
-      header={
-        <BoardsListLayoutHeader
-          title="Доски"
-          description="Здесь вы можете просматривать и управлять своими досками"
-          actions={
-            <>
-            <Button variant='outline' onClick={() => templateModal.open()}>Выбрать шаблон</Button>
-            <Button
-              disabled={createBoard.isPending}
-              onClick={createBoard.createBoard}
-            >
-              <PlusIcon /> Создать доску
-            </Button></>
+      <TemplatesModal />
+      <BoardsListLayout
+        templates={<TemplatesGallery />}
+        sidebar={<BoardsSidebar />}
+        header={
+          <BoardsListLayoutHeader
+            title="Доски"
+            description="Здесь вы можете просматривать и управлять своими досками"
+            actions={
+              <>
+                <Button variant="outline" onClick={() => templateModal.open()}>
+                  Выбрать шаблон
+                </Button>
+                <Button
+                  disabled={createBoard.isPending}
+                  onClick={createBoard.createBoard}
+                >
+                  <PlusIcon /> Создать доску
+                </Button>
+              </>
+            }
+          />
+        }
+        filters={
+          <BoardsListLayoutFilters
+            search={
+              <BoardsSearchInput
+                value={boardsFilters.search}
+                onChange={boardsFilters.setSearch}
+              />
+            }
+            sort={
+              <BoardsSortFilter
+                value={boardsFilters.sort}
+                onValueChange={boardsFilters.setSort}
+              />
+            }
+            actions={
+              <ViewToggleList
+                value={viewMode}
+                onChange={(value) => setViewMode(value)}
+              />
+            }
+          />
+        }
+      >
+        <BoardsListLayoutContent
+          isPending={boardsQuery.isPending}
+          isPendingNext={boardsQuery.isFetchingNextPage}
+          hasCursor={boardsQuery.hasNextPage}
+          isEmpty={boardsQuery.boards.length === 0}
+          cursorRef={boardsQuery.cursorRef}
+          mode={viewMode}
+          renderList={() =>
+            boardsQuery.boards.map((board) => (
+              <BoardsListItem
+                key={board.id}
+                board={board}
+                rightActions={
+                  <BoardFavoriteToggle
+                    isFavorite={board.isFavorite}
+                    isFavoriteToggle={() =>
+                      handleToggleFavorite.handleToggleFavorite(
+                        board.id,
+                        !board.isFavorite,
+                      )
+                    }
+                    disabled={handleToggleFavorite.isPending(board.id)}
+                  />
+                }
+                menuActions={
+                  <ConfirmModal
+                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+                  >
+                    <Button
+                      variant="ghost"
+                      className="text-red-500 hover:text-red-500/90"
+                      disabled={deleteBoard.isPending(board.id)}
+                    >
+                      Удалить
+                    </Button>
+                  </ConfirmModal>
+                }
+              />
+            ))
+          }
+          renderGrid={() =>
+            boardsQuery.boards.map((board) => (
+              <BoardsListCard
+                key={board.id}
+                board={board}
+                rightTopActions={
+                  <BoardFavoriteToggle
+                    isFavorite={board.isFavorite}
+                    isFavoriteToggle={() =>
+                      handleToggleFavorite.handleToggleFavorite(
+                        board.id,
+                        !board.isFavorite,
+                      )
+                    }
+                    disabled={handleToggleFavorite.isPending(board.id)}
+                  />
+                }
+                bottomActions={
+                  <ConfirmModal
+                    handleClick={() => deleteBoard.deleteBoard(board.id)}
+                  >
+                    <Button
+                      variant="destructive"
+                      disabled={deleteBoard.isPending(board.id)}
+                    >
+                      Удалить
+                    </Button>
+                  </ConfirmModal>
+                }
+              />
+            ))
           }
         />
-      }
-      filters={
-        <BoardsListLayoutFilters
-          search={
-            <BoardsSearchInput
-              value={boardsFilters.search}
-              onChange={boardsFilters.setSearch}
-            />
-          }
-          sort={
-            <BoardsSortFilter
-              value={boardsFilters.sort}
-              onValueChange={boardsFilters.setSort}
-            />
-          }
-          actions={
-            <ViewToggleList
-              value={viewMode}
-              onChange={(value) => setViewMode(value)}
-            />
-          }
-        />
-      }
-    >
-      <BoardsListLayoutContent
-        isPending={boardsQuery.isPending}
-        isPendingNext={boardsQuery.isFetchingNextPage}
-        hasCursor={boardsQuery.hasNextPage}
-        isEmpty={boardsQuery.boards.length === 0}
-        cursorRef={boardsQuery.cursorRef}
-        mode={viewMode}
-        renderList={() =>
-          boardsQuery.boards.map((board) => (
-            <BoardsListItem
-              key={board.id}
-              board={board}
-              rightActions={
-                <BoardFavoriteToggle
-                  isFavorite={board.isFavorite}
-                  isFavoriteToggle={() =>
-                    handleToggleFavorite.handleToggleFavorite(
-                      board.id,
-                      !board.isFavorite,
-                    )
-                  }
-                  disabled={handleToggleFavorite.isPending(board.id)}
-                />
-              }
-              menuActions={
-                <ConfirmModal
-                  handleClick={() => deleteBoard.deleteBoard(board.id)}
-                >
-                  <Button
-                    variant="ghost"
-                    className="text-red-500 hover:text-red-500/90"
-                    disabled={deleteBoard.isPending(board.id)}
-                  >
-                    Удалить
-                  </Button>
-                </ConfirmModal>
-              }
-            />
-          ))
-        }
-        renderGrid={() =>
-          boardsQuery.boards.map((board) => (
-            <BoardsListCard
-              key={board.id}
-              board={board}
-              rightTopActions={
-                <BoardFavoriteToggle
-                  isFavorite={board.isFavorite}
-                  isFavoriteToggle={() =>
-                    handleToggleFavorite.handleToggleFavorite(
-                      board.id,
-                      !board.isFavorite,
-                    )
-                  }
-                  disabled={handleToggleFavorite.isPending(board.id)}
-                />
-              }
-              bottomActions={
-                <ConfirmModal
-                  handleClick={() => deleteBoard.deleteBoard(board.id)}
-                >
-                  <Button
-                    variant="destructive"
-                    disabled={deleteBoard.isPending(board.id)}
-                  >
-                    Удалить
-                  </Button>
-                </ConfirmModal>
-              }
-            />
-          ))
-        }
-      />
-    </BoardsListLayout>
+      </BoardsListLayout>
     </>
   );
 }

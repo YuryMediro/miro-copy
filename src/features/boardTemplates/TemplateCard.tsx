@@ -15,7 +15,11 @@ interface TemplateCardProps {
   className?: string;
 }
 
-export default function TemplateCard({onSelect,template,className}:TemplateCardProps) {
+export default function TemplateCard({
+  onSelect,
+  template,
+  className,
+}: TemplateCardProps) {
   return (
     <div
       className={cn(
@@ -41,5 +45,5 @@ export default function TemplateCard({onSelect,template,className}:TemplateCardP
         Использовать
       </Button>
     </div>
-  )
+  );
 }

@@ -31,7 +31,7 @@ export default function BoardsListItem({
           variant="link"
           className="text-left justify-start h-auto p-0"
         >
-          <Link to={`/board/${board.id}`}>
+          <Link to={`/boards/${board.id}`}>
             <span className="text-lg font-medium truncate block">
               {board.name}
             </span>

@@ -28,14 +28,22 @@ const templates = [
   },
 ];
 
-export default function TemplatesGallery({className}: {className?: string}) {
+export default function TemplatesGallery({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <ScrollArea className={className}>
-        <div className="flex gap-4">
-         {templates.map((template) => (
-            <TemplateCard key={template.id} template={template} onSelect={() => {}}/>
-         ))}
-        </div>
+      <div className="flex gap-4">
+        {templates.map((template) => (
+          <TemplateCard
+            key={template.id}
+            template={template}
+            onSelect={() => {}}
+          />
+        ))}
+      </div>
     </ScrollArea>
-  )
+  );
 }
