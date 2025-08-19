@@ -3,21 +3,24 @@ import { ArrowRight, StickerIcon } from "lucide-react";
 import { useNodes } from "./model/nodes";
 import { useBoardViewState } from "./viewState";
 import { useCanvasRect } from "./hooks/useCanvasRect";
-import type { Ref } from "react";
+import { type Ref } from "react";
 import type React from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/ui/kit/tooltip";
+import { useLayoutFocus } from "./hooks/useLayoutFocus";
 
 export default function BoardPage() {
   const { nodes, addSticker } = useNodes();
   const { viewState, goToAddSticker, goToIdle } = useBoardViewState();
+  const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
 
   return (
     <Layout
+      ref={focusLayoutRef}
       onKeyDown={(e) => {
         if (viewState.type === "add-sticker") {
           if (e.key === "Escape") {
@@ -86,10 +89,14 @@ export default function BoardPage() {
 
 function Layout({
   children,
+  ref,
   ...props
-}: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
+}: {
+  children: React.ReactNode;
+  ref: Ref<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="grow relative" tabIndex={0} {...props}>
+    <div className="grow relative" tabIndex={0} ref={ref} {...props}>
       {children}
     </div>
   );
