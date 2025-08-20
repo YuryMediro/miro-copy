@@ -1,17 +1,17 @@
 import { useState } from "react";
 
-type AddStickerViewSate = {
+export type AddStickerViewSate = {
   type: "add-sticker";
 };
 
-type IdleViewState = {
+export type IdleViewState = {
   type: "idle";
   selectedIds: Set<string>;
 };
 
 type ViewState = AddStickerViewSate | IdleViewState;
 
-export function useViewModel() {
+export function useViewState() {
   const [viewState, setViewState] = useState<ViewState>({
     type: "idle",
     selectedIds: new Set(),
@@ -43,6 +43,8 @@ export function useViewModel() {
 
   return { viewState, goToAddSticker, goToIdle, selection };
 }
+
+export type ViewStateModel = ReturnType<typeof useViewState>;
 
 function selectItems(
   viewState: IdleViewState,

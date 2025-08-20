@@ -10,61 +10,34 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/kit/tooltip";
 import { useLayoutFocus } from "./hooks/useLayoutFocus";
-import { useViewModel } from "./viewModel";
 import clsx from "clsx";
+import { useViewModel } from "./viewModel/useViewModel";
+import { useViewState } from "./model/viewState";
 
 export default function BoardPage() {
-  const { nodes, addSticker } = useNodes();
-  const viewModel = useViewModel();
+  const nodesModel = useNodes();
+  const viewStateModel = useViewState();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
 
+  const viewModel = useViewModel({
+    canvasRect,
+    nodesModel,
+    viewStateModel,
+  });
+
   return (
-    <Layout
-      ref={focusLayoutRef}
-      onKeyDown={(e) => {
-        if (viewModel.viewState.type === "add-sticker") {
-          if (e.key === "Escape") {
-            viewModel.goToIdle();
-          }
-        }
-        if (viewModel.viewState.type === "idle") {
-          if (e.key === "s") {
-            viewModel.goToAddSticker();
-          }
-        }
-      }}
-    >
+    <Layout ref={focusLayoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
       <Dots />
-      <Canvas
-        ref={canvasRef}
-        onClick={(e) => {
-          if (viewModel.viewState.type === "add-sticker" && canvasRect) {
-            addSticker({
-              text: "Default",
-              x: e.clientX - canvasRect.x,
-              y: e.clientY - canvasRect.y,
-            });
-            viewModel.goToIdle();
-          }
-        }}
-      >
-        {nodes.map((node) => (
+      <Canvas ref={canvasRef} onClick={viewModel.canvas?.onClick}>
+        {viewModel.nodes.map((node) => (
           <Sticker
             key={node.id}
             text={node.text}
             x={node.x}
             y={node.y}
-            selected={viewModel.viewState.type === 'idle' && viewModel.viewState.selectedIds.has(node.id)}
-            onClick={(e) => {
-              if (viewModel.viewState.type === "idle") {
-                if (e.ctrlKey || e.shiftKey) {
-                  viewModel.selection([node.id], "toggle");
-                } else {
-                  viewModel.selection([node.id], "replace");
-                }
-              }
-            }}
+            selected={node.isSelected}
+            onClick={node.onClick}
           />
         ))}
       </Canvas>
@@ -73,14 +46,8 @@ export default function BoardPage() {
           <TooltipTrigger asChild>
             <div>
               <ActionButton
-                isActive={viewModel.viewState.type === "add-sticker"}
-                onClick={() => {
-                  if (viewModel.viewState.type === "add-sticker") {
-                    viewModel.goToIdle();
-                  } else {
-                    viewModel.goToAddSticker();
-                  }
-                }}
+                isActive={viewModel.actions?.addSticker?.isActive}
+                onClick={viewModel.actions?.addSticker?.onClick}
               >
                 <StickerIcon />
               </ActionButton>
@@ -149,8 +116,8 @@ function Sticker({
   text: string;
   x: number;
   y: number;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  selected: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  selected?: boolean;
 }) {
   return (
     <button
@@ -180,8 +147,8 @@ function ActionButton({
   onClick,
 }: {
   children: React.ReactNode;
-  isActive: boolean;
-  onClick: () => void;
+  isActive?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <Button
