@@ -1,39 +1,7 @@
-import type { CanvasRect } from "../hooks/useCanvasRect";
-import type { NodesModel } from "../model/nodes";
-import type { ViewStateModel } from "../model/viewState";
 import { useAddStickerViewModel } from "./variants/addSticker";
 import { useIdleViewModel } from "./variants/idle";
-
-type ViewModelNode = {
-  id: string;
-  text: string;
-  x: number;
-  y: number;
-  isSelected?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-};
-
-export type ViewModel = {
-  layout?: {
-    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-  };
-  canvas?: {
-    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  };
-  nodes: ViewModelNode[];
-  actions?: {
-    addSticker?: {
-      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-      isActive?: boolean;
-    };
-  };
-};
-
-export type ViewModelParams = {
-  nodesModel: NodesModel;
-  viewStateModel: ViewStateModel;
-  canvasRect: CanvasRect | undefined;
-};
+import type { ViewModelParams } from "./viewModelParams";
+import type { ViewModel } from "./viewModelType";
 
 export function useViewModel(params: ViewModelParams) {
   let viewModel: ViewModel;

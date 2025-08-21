@@ -30,6 +30,11 @@ export default function BoardPage() {
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
       <Dots />
       <Canvas ref={canvasRef} onClick={viewModel.canvas?.onClick}>
+        <Overlay
+          onClick={viewModel.overlay?.onClick}
+          onMouseDown={viewModel.overlay?.onMouseDown}
+          onMouseUp={viewModel.overlay?.onMouseUp}
+        />
         {viewModel.nodes.map((node) => (
           <Sticker
             key={node.id}
@@ -67,6 +72,25 @@ export default function BoardPage() {
         </ActionButton>
       </Actions>
     </Layout>
+  );
+}
+
+function Overlay({
+  onClick,
+  onMouseDown,
+  onMouseUp,
+}: {
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseUp?: (e: React.MouseEvent<HTMLDivElement>) => void;
+}) {
+  return (
+    <div
+      className="absolute inset-0"
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    ></div>
   );
 }
 
