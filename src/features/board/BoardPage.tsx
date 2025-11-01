@@ -12,19 +12,20 @@ import {
 import { useLayoutFocus } from "./hooks/useLayoutFocus";
 import clsx from "clsx";
 import { useViewModel } from "./viewModel/useViewModel";
-import { useViewState } from "./model/viewState";
+import type { Rect } from "./domain/rect";
+import { useWindowEvents } from "./hooks/useWindowEvents";
 
 export default function BoardPage() {
   const nodesModel = useNodes();
-  const viewStateModel = useViewState();
   const focusLayoutRef = useLayoutFocus();
   const { canvasRef, canvasRect } = useCanvasRect();
 
   const viewModel = useViewModel({
     canvasRect,
     nodesModel,
-    viewStateModel,
   });
+
+  useWindowEvents(viewModel);
 
   return (
     <Layout ref={focusLayoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
@@ -33,7 +34,6 @@ export default function BoardPage() {
         <Overlay
           onClick={viewModel.overlay?.onClick}
           onMouseDown={viewModel.overlay?.onMouseDown}
-          onMouseUp={viewModel.overlay?.onMouseUp}
         />
         {viewModel.nodes.map((node) => (
           <Sticker
@@ -46,6 +46,9 @@ export default function BoardPage() {
           />
         ))}
       </Canvas>
+      {viewModel.selectionWindow && (
+        <SelectionWindow {...viewModel.selectionWindow} />
+      )}
       <Actions>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -72,6 +75,19 @@ export default function BoardPage() {
         </ActionButton>
       </Actions>
     </Layout>
+  );
+}
+
+function SelectionWindow({ height, width, x, y }: Rect) {
+  return (
+    <div
+      className="absolute inset-0 bg-blue-500/30 border-2 border-blue-500"
+      style={{
+        transform: `translate(${x}px, ${y}px)`,
+        width: width,
+        height: height,
+      }}
+    ></div>
   );
 }
 

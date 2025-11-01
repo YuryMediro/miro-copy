@@ -1,3 +1,5 @@
+import type { Rect } from "../domain/rect";
+
 type ViewModelNode = {
   id: string;
   text: string;
@@ -24,6 +26,10 @@ export type ViewModel = {
   overlay?: {
     onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void;
-    onMouseUp?: (e: React.MouseEvent<HTMLDivElement>) => void;
   };
+  window?: {
+    onMouseUp?: (e: MouseEvent) => void;
+    onMouseMove?: (e: MouseEvent) => void;
+  };
+  selectionWindow?: Rect;
 };

@@ -1,9 +1,10 @@
+import type { Dispatch, SetStateAction } from "react";
 import type { CanvasRect } from "../hooks/useCanvasRect";
 import type { NodesModel } from "../model/nodes";
-import type { ViewStateModel } from "../model/viewState";
+import type { ViewState } from "./useViewModel";
 
 export type ViewModelParams = {
+  setViewState: Dispatch<SetStateAction<ViewState>>;
   nodesModel: NodesModel;
-  viewStateModel: ViewStateModel;
   canvasRect: CanvasRect | undefined;
 };
